@@ -1,0 +1,38 @@
+django-admin startproject dashboard_project
+cd dashboard_project
+python manage.py startapp dashboard
+INSTALLED_APPS = [dashboard_project/settings.py:]
+# dashboard/models.py
+from django.db import models
+
+class SalesData(models.Model):
+    date = models.DateField()
+    sales = models.DecimalField(max_digits=10, decimal_places=2)
+    profit = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.date}: Sales={self.sales}, Profit={self.profit}"
+python manage.py makemigrations
+python manage.py migrate
+# dashboard/views.py
+from django.shortcuts import render
+from .models import SalesData
+
+def dashboard_view(request):
+    sales_data = SalesData.objects.all()
+    return render(request, 'dashboard/dashboard.html', {'sales_data': sales_data})
+# dashboard/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.dashboard_view, name='dashboard'),
+]
+# dashboard_project/urls.py
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('dashboard/', include('dashboard.urls')),
+]
