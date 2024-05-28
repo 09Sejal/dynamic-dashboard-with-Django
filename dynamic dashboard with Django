@@ -1,0 +1,65 @@
+Create the HTML template to display the data in dashboard 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Dashboard</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sales Dashboard</h1>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Sales</th>
+            <th>Profit</th>
+        </tr>
+        {% for data in sales_data %}
+        <tr>
+            <td>{{ data.date }}</td>
+            <td>{{ data.sales }}</td>
+            <td>{{ data.profit }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+ to see your dashboard:
+python manage.py runserver
+To integrate JavaScript libraries like Chart.js or D3.js for interactive charts and graphs.
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+JavaScript to render the chart:
+<script>
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for data in sales_data %}'{{ data.date }}',{% endfor %}],
+            datasets: [{
+                label: 'Sales',
+                data: [{% for data in sales_data %}{{ data.sales }},{% endfor %}],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
